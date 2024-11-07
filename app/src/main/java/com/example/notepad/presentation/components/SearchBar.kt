@@ -13,10 +13,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -29,12 +25,10 @@ fun SearchNotesBar(
     onClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var active by remember { mutableStateOf(false) }
     OutlinedTextField(
         value = searchQuery,
         onValueChange = {
             onQueryChange(it)
-            active = it.isNotEmpty()
         },
         placeholder = {
             Text(
@@ -50,10 +44,9 @@ fun SearchNotesBar(
             )
         },
         trailingIcon = {
-            if (active) {
+            if (searchQuery.isNotEmpty()) {
                 IconButton(onClick = {
                     onClear()
-                    active = false
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
@@ -73,6 +66,7 @@ fun SearchNotesBar(
         ),
         modifier = modifier
             .padding(12.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        singleLine = true
     )
 }

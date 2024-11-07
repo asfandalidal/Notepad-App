@@ -14,7 +14,6 @@ data class NoteEntity(
     val title: String,
     val desc: String
 )
-
 fun getCurrentDateTime(): String {
     val currentDate = java.util.Date()
     val format = SimpleDateFormat("MMMM d, yyyy hh:mm a", Locale.getDefault())

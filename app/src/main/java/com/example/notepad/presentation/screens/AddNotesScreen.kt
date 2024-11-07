@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.example.notepad.presentation.components.NotepadEditor
 import com.example.notepad.presentation.components.NotesTopBar
 import com.example.notepad.presentation.components.TitleTextField
 import com.example.notepad.presentation.viewmodels.NotesViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddNotesScreen(
@@ -42,11 +44,11 @@ fun AddNotesScreen(
     val noteContentState = rememberSaveable { mutableStateOf("") }
     val isSaveIconVisible = titleState.value.isNotBlank() || noteContentState.value.isNotBlank()
     val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,12 +62,14 @@ fun AddNotesScreen(
                         title = titleState.value,
                         desc = noteContentState.value
                     )
-                    viewModel.insertNote(note)
-                    navController.navigateUp()
+                    coroutineScope.launch {
+                        viewModel.insertNote(note)
+                        navController.navigateUp()
+                    }
                 }
-            },
-            isSaveIconVisible = isSaveIconVisible,
-            navController = navController
+                },
+                isSaveIconVisible = isSaveIconVisible,
+                navController = navController
         )
 
         Column(

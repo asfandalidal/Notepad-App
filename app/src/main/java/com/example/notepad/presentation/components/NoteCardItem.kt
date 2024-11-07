@@ -1,10 +1,9 @@
 package com.example.notepad.presentation.components
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -23,14 +22,16 @@ import com.example.notepad.data.local.notes.entity.NoteEntity
 @Composable
 fun NoteCardItem(
     noteEntity: NoteEntity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick:()->Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onClick() }
             .border(1.dp, Color.Gray, shape = MaterialTheme.shapes.small),
-                colors= CardDefaults.cardColors(containerColor = Color.Black)
+             colors= CardDefaults.cardColors(containerColor = Color.Black)
     ) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -50,7 +51,6 @@ fun NoteCardItem(
                 color = Color.DarkGray,
                 fontSize = 12.sp)
                  modifier.fillMaxWidth()
-
         }
     }
 }

@@ -4,12 +4,11 @@ import android.util.Log
 import com.example.notepad.data.local.notes.dao.NoteDao
 import com.example.notepad.data.local.notes.entity.NoteEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class NotesRepositoryImpl @Inject constructor(
     private val noteDao: NoteDao
-):NotesRepository {
+) : NotesRepository {
 
     override suspend fun insertNote(noteEntity: NoteEntity) {
         try {
@@ -20,23 +19,31 @@ class NotesRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun updateNote(noteId: String) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteAllNote() {
-        TODO("Not yet implemented")
+        noteDao.deleteAllNotes()
     }
 
-    override suspend fun getAllNotes(): Flow<List<NoteEntity>> {
+    override fun getAllNotes(): Flow<List<NoteEntity>> {
+        return noteDao.getAllNotes()
+    }
+
+    override suspend fun getNoteById(id: String): NoteEntity? {
         return try {
-            val fetchedNotes = noteDao.getAllNotes()
-            Log.d("success", "$fetchedNotes")
-            fetchedNotes
+            val fetchedNote = id.toLongOrNull()?.let { noteDao.getNoteById(it) }
+            Log.d("success", "$fetchedNote")
+            fetchedNote
         } catch (e: Exception) {
             Log.e("error", e.localizedMessage ?: "Unknown error")
-            emptyFlow()
+            return null
+        }
+    }
+
+    override suspend fun updateNoteById(id: String, title: String, desc: String, date: String) {
+        try {
+            noteDao.updateNoteById(id.toLong(), title = title, desc = desc, date = date)
+            Log.d("success", "Update sucessful with id : $id")
+        } catch (e: Exception) {
+            Log.e("error", e.localizedMessage ?: "Unknown error")
         }
     }
 }

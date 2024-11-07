@@ -7,10 +7,11 @@ interface NotesRepository {
 
     suspend fun insertNote(noteEntity: NoteEntity) //insert note into db
 
-    suspend fun updateNote(noteId:String) //update note acc to id
-
     suspend fun deleteAllNote() //delete all notes
 
-    suspend fun getAllNotes(): Flow<List<NoteEntity>> // fetch all notes from db
+    fun getAllNotes(): Flow<List<NoteEntity>> // fetch all notes from db
 
+    suspend fun getNoteById(id:String):NoteEntity?
+
+    suspend fun updateNoteById(id:String,title:String,desc:String,date:String)
 }

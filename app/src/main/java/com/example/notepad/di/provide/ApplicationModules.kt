@@ -26,6 +26,7 @@ object ApplicationModules {
             NoteDatabase::class.java,
             NoteDatabaseConst.DB_NAME
         ).build()
+
     }
     @Singleton
     @Provides

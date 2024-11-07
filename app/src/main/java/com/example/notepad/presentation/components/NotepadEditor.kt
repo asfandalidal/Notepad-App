@@ -38,7 +38,6 @@ fun NotepadEditor(
                 style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp)
             )
         }
-
         BasicTextField(
             value = text,
             onValueChange = onTextChange,
