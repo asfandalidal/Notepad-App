@@ -2,6 +2,10 @@
 
 A modern Notepad application demonstrating advanced Android development with Jetpack Compose, Hilt, Material3, and other cutting-edge tools in the Android ecosystem.
 
+    📸 Screenshots
+![ssnotes](https://github.com/user-attachments/assets/506b71ca-7fff-49ca-88a5-4733a16e54fa)
+
+
 ✨ Features
 
     🖋️ Create, edit, and delete notes effortlessly.
@@ -35,8 +39,6 @@ The app follows MVVM (Model-View-ViewModel) architecture:
     🧠 ViewModel: Manages UI-related data and ensures lifecycle-awareness to survive configuration changes.
     🖼️ View (Jetpack Compose): Displays the UI in a declarative and reactive way based on state changes.
 
-    📸 Screenshots
-![ssnotes](https://github.com/user-attachments/assets/506b71ca-7fff-49ca-88a5-4733a16e54fa)
 
 🎥 Demo Video
 
