@@ -57,7 +57,7 @@ Follow these steps to run the project locally:
 
     Clone the repository:
 
-    git clone https://github.com/your-username/notepad.git  
+    git clone https://github.com/asfandalidal/notepad.git  
     cd notepad  
 
     Open the project in Android Studio.
