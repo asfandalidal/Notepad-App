@@ -14,4 +14,6 @@ interface NotesRepository {
     suspend fun getNoteById(id:String):NoteEntity?
 
     suspend fun updateNoteById(id:String,title:String,desc:String,date:String)
+
+    suspend fun deleteById(id:String)
 }

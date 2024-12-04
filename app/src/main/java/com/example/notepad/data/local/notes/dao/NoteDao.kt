@@ -25,4 +25,8 @@ interface NoteDao {
     @Query("UPDATE notes SET title = :title, `desc` = :desc, date = :date WHERE id = :id")
     suspend fun updateNoteById(id: Long, title: String, desc: String, date: String)
 
+    @Query("DELETE FROM NOTES WHERE id = :id")
+     suspend fun deleteNoteById(id: Long)
+
+
 }

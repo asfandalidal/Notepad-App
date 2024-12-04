@@ -46,4 +46,8 @@ class NotesRepositoryImpl @Inject constructor(
             Log.e("error", e.localizedMessage ?: "Unknown error")
         }
     }
+
+    override suspend fun deleteById(id: String) {
+        noteDao.deleteNoteById(id.toLong())
+    }
 }

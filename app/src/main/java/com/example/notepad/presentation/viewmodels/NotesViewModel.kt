@@ -65,5 +65,12 @@ class NotesViewModel @Inject constructor(
             notesRepository.deleteAllNote()
         }
     }
+
+    fun deleteById(id:Long)
+    {
+        viewModelScope.launch {
+            notesRepository.deleteById(id.toString())
+        }
+    }
 }
 

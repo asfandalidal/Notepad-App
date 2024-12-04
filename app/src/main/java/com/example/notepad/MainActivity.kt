@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.notepad.navigation.AppNavHost
-import com.example.notepad.presentation.screens.NoteListScreen
 import com.example.notepad.ui.theme.NotepadTheme
 import dagger.hilt.android.AndroidEntryPoint
 

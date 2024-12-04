@@ -2,27 +2,14 @@ package com.example.notepad.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,6 +43,9 @@ fun NoteListScreen(
                 it.desc.contains(searchQuery, ignoreCase = true)
     }
 
+    val selectedNotes = remember { mutableStateListOf<Long>() }
+    val deleteMode = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         if (fetchedNotes.isEmpty() && !loading) {
             viewModel.getAllNotes()
@@ -76,21 +66,73 @@ fun NoteListScreen(
                     modifier = Modifier.fillMaxSize().padding(bottom = 80.dp),
                     verticalArrangement = Arrangement.Top
                 ) {
-                    MainTopBar(onDeleteAllNotes = { viewModel.deleteAllNotes() })
-
+                    MainTopBar(
+                        onDeleteAllNotes = {
+                            viewModel.deleteAllNotes()
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
                     SearchNotesBar(
                         searchQuery = searchQuery,
                         onQueryChange = onQueryChange,
                         onClear = onClear
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(filteredNotes) { note ->
-                            NoteCardItem(note, onClick = {
-                                coroutineScope.launch { viewModel.getNoteById(note.id) }
-                                navController.navigate(NavigationItem.NoteDetailScreen.createRoute(note.id.toString()))
-                            })
+                            NoteCardItem(
+                                noteEntity = note,
+                                onLongClick = {
+                                    // Toggle selection on long press
+                                    deleteMode.value = true
+                                    if (selectedNotes.contains(note.id)) {
+                                        selectedNotes.remove(note.id)
+                                    } else {
+                                        selectedNotes.add(note.id)
+                                    }
+                                },
+                                isSelected = selectedNotes.contains(note.id),  // Highlight selected state
+                                onClick = {
+                                    if (deleteMode.value) {
+                                        // In delete mode, toggle the selection state
+                                        if (selectedNotes.contains(note.id)) {
+                                            selectedNotes.remove(note.id)
+                                        } else {
+                                            selectedNotes.add(note.id)
+                                        }
+                                    } else {
+                                        // Normal click to view note details
+                                        coroutineScope.launch { viewModel.getNoteById(note.id) }
+                                        navController.navigate(NavigationItem.NoteDetailScreen.createRoute(note.id.toString()))
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+                if (selectedNotes.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp, 55.dp)
+                    ) {
+                        IconButton(
+                            onClick = {
+                                selectedNotes.forEach { id ->
+                                    viewModel.deleteById(id)
+                                }
+                                selectedNotes.clear()
+                                deleteMode.value = false
+                            },
+                            modifier = Modifier.size(56.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.White,
+                                modifier = Modifier.size(40.dp) // Icon size
+                            )
                         }
                     }
                 }
